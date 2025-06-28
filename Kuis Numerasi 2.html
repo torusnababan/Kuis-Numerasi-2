@@ -1,0 +1,542 @@
+ <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Numerasi - 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+            position: relative; /* Diperlukan untuk penempatan gambar absolut */
+        }
+        .header-main-title {
+            text-align: center; /* Pusatkan judul utama */
+            margin-bottom: 5px; /* Sedikit spasi di bawah judul */
+        }
+        h1 {
+            color: #0056b3;
+            margin: 0; /* Hapus margin default */
+            font-size: 2em; /* Sesuaikan ukuran font judul jika perlu */
+        }
+        .author-info {
+            text-align: center; /* Pusatkan informasi penulis */
+            margin-bottom: 20px; /* Spasi di bawah informasi penulis */
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .author-info p {
+            margin: 0; /* Hapus margin default paragraf */
+            font-size: 0.9em;
+            color: #555;
+        }
+        .author-info p:first-child {
+            font-weight: bold;
+            color: #333;
+            font-size: 1em;
+        }
+        .header-image {
+            position: absolute; /* Posisikan gambar secara absolut */
+            top: 20px; /* Jarak dari atas container */
+            right: 20px; /* Jarak dari kanan container */
+            width: 120px; /* Ukuran gambar */
+            height: 120px; /* Ukuran gambar */
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #0056b3;
+            z-index: 10; /* Pastikan gambar di atas elemen lain */
+        }
+        .left-header-image {
+            position: absolute; /* Posisikan gambar secara absolut */
+            top: 20px; /* Jarak dari atas container, sesuaikan jika perlu */
+            left: 20px; /* Jarak dari kiri container */
+            width: 80px; /* Ukuran gambar lebih kecil dari logo.png */
+            height: 80px; /* Ukuran gambar lebih kecil dari logo.png */
+            border-radius: 8px; /* Sedikit radius untuk sudut */
+            object-fit: cover;
+            border: 2px solid #0056b3;
+            z-index: 10;
+        }
+
+        /* Umum untuk bagian lain */
+        h2 {
+            color: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .question {
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .question p {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: normal;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #timer {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        #timeLimitDisplay {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 5px;
+            /* Penambahan margin-top untuk memberi jarak dari gambar */
+            margin-top: 50px; /* Sesuaikan nilai ini sesuai kebutuhan */
+        }
+        #results {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e9ecef;
+            display: none;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+        .cooldown-message {
+            text-align: center;
+            font-size: 1.2em;
+            color: #d9534f;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #d9534f;
+            border-radius: 5px;
+            background-color: #ffe0e0;
+        }
+
+        /* Media queries untuk responsivitas */
+        @media (max-width: 600px) {
+            .header-image, .left-header-image {
+                position: static; /* Kembali ke posisi normal pada layar kecil */
+                margin: 10px auto; /* Pusatkan secara horizontal */
+                display: block; /* Agar margin auto bekerja */
+            }
+            .header-main-title, .author-info {
+                text-align: center; /* Pastikan tetap terpusat */
+            }
+            .container {
+                position: static; /* Hapus positioning absolut pada container */
+            }
+            #timeLimitDisplay {
+                margin-top: 15px; /* Sesuaikan margin untuk tampilan mobile agar tidak terlalu jauh */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-main-title">
+            <h1>Kuis Numerasi - 2</h1>
+        </div>
+        <div class="author-info">
+            <p>By. Torus Manuntun Nababan, S.Pd.,M.Pd</p>
+            <p>(Pengembang Soal Kuis)</p>
+        </div>
+        <img src="logo.png" alt="Foto Torus Manuntun Nababan, S.Pd.,M.Pd" class="header-image">
+        <img src="jas.jpg" alt="Ilustrasi Jas" class="left-header-image">
+
+        <p id="timeLimitDisplay">Waktu pengerjaan: <span id="timeLimit">15</span> menit</p>
+        <div id="timer">Waktu tersisa: 15:00</div>
+
+        <form id="quizForm">
+            <h2>Identitas Siswa</h2>
+            <div class="form-group">
+                <label for="sekolah">Nama Sekolah:</label>
+                <input type="text" id="sekolah" name="sekolah" required>
+            </div>
+            <div class="form-group">
+                <label for="nama">Nama Siswa:</label>
+                <input type="text" id="nama" name="nama" required>
+            </div>
+            <div class="form-group">
+                <label for="kelas">Kelas:</label>
+                <input type="text" id="kelas" name="kelas" required>
+            </div>
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <select id="semester" name="semester" required>
+                    <option value="">Pilih Semester</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tahunAjaran">Tahun Ajaran:</label>
+                <input type="text" id="tahunAjaran" name="tahunAjaran" placeholder="Contoh: 2024/2025" required>
+            </div>
+
+            <hr>
+
+            <h2>Soal Kuis</h2>
+            <div id="questionsContainer">
+            </div>
+
+            <button type="submit">Selesai Kuis</button>
+        </form>
+
+        <div id="results">
+            <h2>Hasil Kuis</h2>
+            <p><strong>Nama Guru:</strong> <span id="resultNama"></span></p>
+            <p><strong>Skor Anda:</strong> <span id="score"></span></p>
+            <p id="message"></p>
+            <h3>Detail Jawaban:</h3>
+            <div id="answerDetails">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Penjumlahan (Addition) - 3 questions
+            {
+                type: "penjumlahan",
+                question: "Berapakah hasil dari 25 + 17?",
+                options: ["40", "42", "38", "32"],
+                answer: "42"
+            },
+            {
+                type: "penjumlahan",
+                question: "Jumlahkan 68 + 29.",
+                options: ["97", "87", "95", "85"],
+                answer: "97"
+            },
+            {
+                type: "penjumlahan",
+                question: "Sebuah toko memiliki 154 buku fiksi dan 87 buku non-fiksi. Berapa total buku di toko itu?",
+                options: ["231", "241", "251", "261"],
+                answer: "241"
+            },
+
+            // Pengurangan (Subtraction) - 3 questions
+            {
+                type: "pengurangan",
+                question: "Berapakah hasil dari 72 - 39?",
+                options: ["31", "33", "29", "43"],
+                answer: "33"
+            },
+            {
+                type: "pengurangan",
+                question: "Kurangkan 185 dari 300.",
+                options: ["105", "115", "125", "135"],
+                answer: "115"
+            },
+            {
+                type: "pengurangan",
+                question: "Anda membeli barang seharga Rp 450.000 dan membayar dengan uang Rp 1.000.000. Berapa kembalian Anda?",
+                options: ["Rp 500.000", "Rp 550.000", "Rp 600.000", "Rp 650.000"],
+                answer: "Rp 550.000"
+            },
+
+            // Perkalian (Multiplication) - 3 questions
+            {
+                type: "perkalian",
+                question: "Berapakah hasil dari 14 x 6?",
+                options: ["74", "84", "94", "104"],
+                answer: "84"
+            },
+            {
+                type: "perkalian",
+                question: "Kalikan 25 x 8.",
+                options: ["180", "200", "220", "250"],
+                answer: "200"
+            },
+            {
+                type: "perkalian",
+                question: "Sebuah bioskop memiliki 15 baris kursi, dan setiap baris memiliki 12 kursi. Berapa total kursi di bioskop itu?",
+                options: ["150", "160", "180", "200"],
+                answer: "180"
+            },
+
+            // Pembagian (Division) - 3 questions
+            {
+                type: "pembagian",
+                question: "Berapakah hasil dari 96 : 8?",
+                options: ["10", "12", "14", "16"],
+                answer: "12"
+            },
+            {
+                type: "pembagian",
+                question: "Bagilah 156 dengan 13.",
+                options: ["10", "11", "12", "13"],
+                answer: "12"
+            },
+            {
+                type: "pembagian",
+                question: "Jika 120 pensil dibagi rata kepada 15 siswa, berapa pensil yang didapat setiap siswa?",
+                options: ["6", "7", "8", "9"],
+                answer: "8"
+            },
+
+            // Pangkat (Exponents) - 3 questions
+            {
+                type: "pangkat",
+                question: "Berapakah nilai dari 4 pangkat 3?",
+                options: ["12", "16", "64", "256"],
+                answer: "64"
+            },
+            {
+                type: "pangkat",
+                question: "Hitunglah 2 pangkat 5.",
+                options: ["10", "16", "32", "64"],
+                answer: "32"
+            },
+            {
+                type: "pangkat",
+                question: "Jika sebuah bakteri membelah diri menjadi 2 setiap jam, berapa banyak bakteri setelah 3 jam jika dimulai dari 1 bakteri?",
+                options: ["4", "8", "16", "32"],
+                answer: "8"
+            },
+
+            // Kuadrat (Squares) - 3 questions
+            {
+                type: "kuadrat",
+                question: "Berapakah hasil dari 7 kuadrat?",
+                options: ["14", "36", "49", "64"],
+                answer: "49"
+            },
+            {
+                type: "kuadrat",
+                question: "Nilai dari 11 kuadrat adalah...",
+                options: ["110", "121", "132", "144"],
+                answer: "121"
+            },
+            {
+                type: "kuadrat",
+                question: "Sebuah lantai berbentuk persegi dengan panjang sisi 9 meter. Berapa luas lantai tersebut dalam meter persegi?",
+                options: ["18", "36", "81", "100"],
+                answer: "81"
+            },
+
+            // Logika (Logic) - 2 questions (To make total 20)
+            {
+                type: "logika",
+                question: "Jika semua kucing suka ikan, dan Mia adalah kucing, maka Mia suka ikan. Ini adalah contoh penalaran...",
+                options: ["Induktif", "Deduktif", "Analogis", "Abduktif"],
+                answer: "Deduktif"
+            },
+            {
+                type: "logika",
+                question: "Dalam urutan angka 3, 6, 12, 24, berapa angka berikutnya?",
+                options: ["30", "36", "42", "48"],
+                answer: "48"
+            }
+        ];
+
+        const timeLimitInMinutes = 15;
+        let timeLeft = timeLimitInMinutes * 60; // seconds
+        let timerInterval;
+
+        const quizForm = document.getElementById('quizForm');
+        const questionsContainer = document.getElementById('questionsContainer');
+        const timerDisplay = document.getElementById('timer');
+        const resultsDiv = document.getElementById('results');
+        const resultNama = document.getElementById('resultNama');
+        const scoreDisplay = document.getElementById('score');
+        const messageDisplay = document.getElementById('message');
+        const answerDetailsDiv = document.getElementById('answerDetails');
+
+        // Durasi cooldown: 1 jam dalam milidetik
+        const cooldownDuration = 60 * 60 * 1000;
+        // Kunci untuk menyimpan timestamp di localStorage
+        const lastQuizCompletionKey = 'lastQuizCompletionTime';
+
+        // Fungsi untuk mengacak array (algoritma Fisher-Yates)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Fungsi untuk menghasilkan dan menampilkan pertanyaan
+        function generateQuestions() {
+            shuffleArray(questions); // Acak urutan pertanyaan
+            questionsContainer.innerHTML = ''; // Clear previous questions
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+
+                // Acak pilihan jawaban untuk setiap pertanyaan
+                const shuffledOptions = [...q.options];
+                shuffleArray(shuffledOptions);
+
+                questionDiv.innerHTML = `
+                    <p>${index + 1}. ${q.question}</p>
+                    <div class="options">
+                        ${shuffledOptions.map((option) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${option}"> ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Fungsi untuk memulai timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `Waktu tersisa: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu habis! Kuis akan otomatis disubmit.");
+                    quizForm.dispatchEvent(new Event('submit')); // Otomatis submit formulir
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Penanganan saat formulir disubmit
+        quizForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah pengiriman formulir default
+            clearInterval(timerInterval); // Hentikan timer
+
+            let totalScore = 0; // Inisialisasi skor total
+            const pointsPerCorrect = 5; // Poin untuk setiap jawaban benar
+            const maxPossibleScore = questions.length * pointsPerCorrect; // Skor maksimum yang mungkin
+
+            const answers = {};
+
+            questions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : null;
+                answers[`q${index}`] = userAnswer;
+
+                if (userAnswer === q.answer) {
+                    totalScore += pointsPerCorrect; // Tambahkan poin jika jawaban benar
+                }
+                // Tidak ada pengurangan untuk jawaban salah atau tidak dijawab
+            });
+
+            // Simpan timestamp selesai kuis di localStorage
+            localStorage.setItem(lastQuizCompletionKey, Date.now());
+
+            // Tampilkan hasil
+            resultNama.textContent = document.getElementById('nama').value;
+            scoreDisplay.textContent = `${totalScore} / ${maxPossibleScore}`; // Tampilkan skor saat ini dari total maksimum
+
+            // Tentukan pesan berdasarkan skor
+            if (totalScore >= (0.80 * maxPossibleScore)) { // 80% dari skor maksimum
+                messageDisplay.textContent = "Selamat Anda Pemenang"; // Pesan ini bisa diubah sesuai konteks
+                messageDisplay.style.color = "green";
+            } else {
+                messageDisplay.textContent = "Anda Belum Beruntung, Belajar Lagi Ya"; // Pesan ini bisa diubah sesuai konteks
+                messageDisplay.style.color = "red";
+            }
+
+            // Tampilkan detail jawaban
+            answerDetailsDiv.innerHTML = '';
+            questions.forEach((q, index) => {
+                const userAnswer = answers[`q${index}`];
+                const detailDiv = document.createElement('p');
+                let answerStatusClass = '';
+                let userAnswerText = userAnswer !== null ? userAnswer : 'Tidak dijawab';
+
+                if (userAnswer === q.answer) {
+                    answerStatusClass = 'correct';
+                } else if (userAnswer !== null) { // Jika dijawab tapi salah
+                    answerStatusClass = 'incorrect';
+                } else { // Jika tidak dijawab
+                    answerStatusClass = ''; // Tidak ada kelas khusus
+                }
+
+                detailDiv.innerHTML = `
+                    <strong>${index + 1}. ${q.question}</strong><br>
+                    Jawaban Anda: <span class="${answerStatusClass}">
+                        ${userAnswerText}
+                    </span><br>
+                    Kunci Jawaban: <span class="correct">${q.answer}</span>
+                `;
+                answerDetailsDiv.appendChild(detailDiv);
+            });
+
+            quizForm.style.display = 'none'; // Sembunyikan formulir kuis
+            resultsDiv.style.display = 'block'; // Tampilkan div hasil
+        });
+
+        // Inisialisasi kuis dan cek cooldown saat halaman dimuat
+        window.onload = function() {
+            const lastCompletionTime = localStorage.getItem(lastQuizCompletionKey);
+            if (lastCompletionTime) {
+                const timeElapsed = Date.now() - parseInt(lastCompletionTime);
+                if (timeElapsed < cooldownDuration) {
+                    const remainingTime = cooldownDuration - timeElapsed;
+                    const minutes = Math.floor(remainingTime / (1000 * 60));
+                    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                    quizForm.style.display = 'none';
+                    timerDisplay.style.display = 'none';
+                    document.getElementById('timeLimitDisplay').style.display = 'none'; // Hide the time limit text
+                    const cooldownMessageDiv = document.createElement('div');
+                    cooldownMessageDiv.classList.add('cooldown-message');
+                    cooldownMessageDiv.innerHTML = `
+                        Anda telah menyelesaikan kuis ini. <br>
+                        Silakan coba lagi dalam **${minutes.toString().padStart(2, '0')} menit dan ${seconds.toString().padStart(2, '0')} detik**.
+                    `;
+                    document.querySelector('.container').insertBefore(cooldownMessageDiv, document.getElementById('quizForm'));
+                    return; // Hentikan inisialisasi kuis jika masih dalam masa cooldown
+                }
+            }
+            // Jika tidak ada cooldown atau cooldown sudah berakhir, inisialisasi kuis
+            generateQuestions();
+            startTimer();
+        };
+    </script>
+</body>
+</html>
